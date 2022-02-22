@@ -1,6 +1,7 @@
 ﻿using System.Collections;           //네임스페이스 설정(C# 컨테이너용)
 using System.Collections.Generic;   //네임스페이스 설정(C# 컨테이너용, 제네릭)
 using UnityEngine;                  //네임스페이스 설정(Unity 용)
+using UnityEngine.InputSystem;      //Unity 새 인풋 시스템을 쓰기 위한 네임스페이스
 
 /// 접근제한자 : public(공용, 공공의), protected(보호된), private(개인적인)
 /// public : 누구나 쓸 수 있다.
@@ -25,22 +26,40 @@ public class Player : MonoBehaviour
     // rigid라는 이름의 Rigidbody2D 타입의 변수를 만드는데, private이고 저장되는 초기값은 null이다.
     private Rigidbody2D rigid = null;
     
-    
-    private void Awake()
+    // 게임 오브젝트가 만들어진(Instance) 후 실행되는 함수
+    private void Awake() 
     {
-         rigid = GetComponent<Rigidbody2D>();
+        //cashing을 통해 무거운 작업을 최소한으로 하기 위해 Awake에서 찾음
+         rigid = GetComponent<Rigidbody2D>();   //Rigidbody2D 컴포넌트를 찾아서 rigid에 저장해라.
     }
 
-    private void Update()
-    {
-        // Input Manager
-        if( Input.GetButton("Jump") )
-        {
-            rigid.AddForce(Vector2.up * jumpPower);
-        }
-        //if(Input.GetKeyDown(KeyCode.Space))
-        //{
+    // 매 프레임 마다 호출되는 함수
+    //private void Update()
+    //{
+    //    //// Input Manager를 통해 입력처리를 하는 방법
+    //    //if( Input.GetButton("Jump") ) 
+    //    //{            
+    //    //    rigid.AddForce(Vector2.up * jumpPower);
+    //    //}
+    //    //if(Input.GetKeyDown(KeyCode.Space))
+    //    //{
 
-        //}
+    //    //}
+    //}
+
+    // 스페이스 버튼을 눌었을 때 실행될 함수
+    // 기능은 리지드바디를 통해 위쪽으로 힘을 더한다.
+    public void JumpUp(InputAction.CallbackContext context)
+    {
+        //context.started;      //키를 눌렀을 때
+        //context.performed;    //키를 길게 눌렀었을 때(차징류)
+        //context.canceled;     //키를 땠을 때
+        if (context.started)    //키를 눌렀을 때만 아래의 코드를 실행하라
+        {
+            //rigidbody에 힘을 가해라. 위쪽 방향으로 jumpPower만큼.
+            rigid.AddForce(Vector2.up * jumpPower);
+
+            Debug.Log("Jump!");
+        }
     }
 }
