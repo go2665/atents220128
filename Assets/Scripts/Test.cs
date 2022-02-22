@@ -1,4 +1,4 @@
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -21,7 +21,7 @@ public class Test : MonoBehaviour
 
     //public void TestPrint()
     //{
-    //    Debug.Log("�׽�Ʈ �׽�Ʈ");
+    //    Debug.Log("테스트 테스트");
     //}
 
     //int Plus(int a, int b)
