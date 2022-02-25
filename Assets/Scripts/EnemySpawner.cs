@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -11,6 +11,8 @@ public class EnemySpawner : MonoBehaviour
         // Random.Range : 랜덤한 숫자를 돌려주는 함수
 
         // 위 함수들을 사용하여 게임 화면 오른쪽 끝에서 랜덤한 높이로 적 새가 생성되는 코드를 작성하시오
-
+        Random.Range(0.0f, 1.0f);
+        int[] a = { 1, 2, 3 };        
+        Random.Range(0, a.Length);
     }
 }
