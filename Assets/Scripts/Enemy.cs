@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -23,9 +23,11 @@ public class Enemy : MonoBehaviour
     //    // (0,1,1)+(1,3,1) = (1,4,2)
     //    // (1,2,3) * 2 = (2,4,6)
     //}
-
+    
+    // 매프레임 호출
     private void Update()
     {
+        //왼쪽 방향으로 초당 moveSpeed만큼 이동하도록 설정
         transform.Translate(Vector2.left * moveSpeed * Time.deltaTime);        
     }
 
