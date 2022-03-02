@@ -47,7 +47,7 @@ public class EnemySpawner : MonoBehaviour
         while (true)    // 무한 루프
         {
             // bool[] flags = GetFlagsBoolType();
-            int flags = GetFlags();     //flags 각 비트를 확인해서 1일 때만 새를 생성하면 된다.
+            int flags = GetFlags();     // flags 각 비트를 확인해서 1일 때만 새를 생성하면 된다.
                                         // 0000 0000 0000 0000 0000 0000 0010 1011 (가정)
             int singleFlag = 1;         // 시작값 0000 0000 0000 0000 0000 0000 0000 0001 
 
@@ -56,8 +56,8 @@ public class EnemySpawner : MonoBehaviour
             {
                 //if (flags[i] == true) // GetFlagsBoolType용 조건문
 
-                //새로운 if를 완성해보기
-                if((flags & singleFlag) != 0)
+                // flags와 singleFlag를 &해서 0이 아니면 singleFlag에 설정된 비트 위치에 1이 되어있다는 것
+                if ((flags & singleFlag) != 0)
                 {                    
                     EnemyGenerate(i);
                 }
