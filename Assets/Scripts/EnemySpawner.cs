@@ -47,7 +47,9 @@ public class EnemySpawner : MonoBehaviour
         while (true)    // 무한 루프
         {
             // bool[] flags = GetFlagsBoolType();
-            int flags = GetFlags();
+            int flags = GetFlags();     //flags 각 비트를 확인해서 1일 때만 새를 생성하면 된다.
+                                        // 0000 0000 0000 0000 0000 0000 0010 1011 (가정)
+            int singleFlag = 1;         // 시작값 0000 0000 0000 0000 0000 0000 0000 0001 
 
             // flags에 설정된 값에 따라 새 생성
             for (int i = 0; i < MAX_SPACE_COUNT; i++)
@@ -55,10 +57,11 @@ public class EnemySpawner : MonoBehaviour
                 //if (flags[i] == true) // GetFlagsBoolType용 조건문
 
                 //새로운 if를 완성해보기
-                //if()
-                {
+                if((flags & singleFlag) != 0)
+                {                    
                     EnemyGenerate(i);
                 }
+                singleFlag <<= 1;   // singleFlag의 비트를 한번 검사할 때마다 왼쪽으로 한칸씩 옮김
             }
 
             yield return new WaitForSeconds(spawnInterval);
@@ -82,12 +85,16 @@ public class EnemySpawner : MonoBehaviour
             //  MAX_SPACE_COUNT만큼 왼쪽으로 쉬프트 == 0b_0100_0000
             //  결과-1 ==  0b_0011_1111
             random &= ((1 << MAX_SPACE_COUNT) - 1); //random = random & ((1 << MAX_SPACE_COUNT) - 1);
-
+            
             //결과 예시
             //   0101 0101 0101 0101 0101 0101 0101 0101    (random 변수의 값으로 가정)
             // & 0000 0000 0000 0000 0000 0000 0011 1111    (랜덤으로 나온값을 6bit남기는 방법, (1 << MAX_SPACE_COUNT) - 1의 결과)
             //   0000 0000 0000 0000 0000 0000 0001 0101
 
+            //16진수 표현
+            //int a = 0xff;
+            //2진수 표현
+            //int b = 0b_1111_1111;
             int mask = 0b_0011;
             mask = mask << Random.Range(0, MAX_SPACE_COUNT - 1);    //mask를 랜덤하게 쉬프트(아래 5개 중 하나가 되게 설정)
             //11 0000

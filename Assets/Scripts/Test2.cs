@@ -8,10 +8,14 @@ public class Test2 : MonoBehaviour
     private void Start()
     {
         Debug.Log("Test2");
-        Random.InitState(0);
-        for (int i = 0; i < 5; i++)
-        {
-            Debug.Log("random value : " + Random.value);
-        }
+        //Random.InitState(0);
+        //for (int i = 0; i < 5; i++)
+        //{
+        //    Debug.Log("random value : " + Random.value);
+        //}
+
+        int deleted = 3;
+        deleted <<= 0;
+        Debug.Log(deleted);
     }
 }
