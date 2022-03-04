@@ -12,6 +12,9 @@ public class Enemy : MonoBehaviour
     //transform에 position에 위치값이 저장되어 있음
     //transform에 어떤 함수가 있음
 
+    private const float SCORE_POSITION = 1.5f;
+    private bool getScore = false;
+
     public float moveSpeed = 1.5f;
 
     //private void Start()
@@ -28,7 +31,22 @@ public class Enemy : MonoBehaviour
     private void Update()
     {
         //왼쪽 방향으로 초당 moveSpeed만큼 이동하도록 설정
-        transform.Translate(Vector2.left * moveSpeed * Time.deltaTime);        
+        transform.Translate(Vector2.left * moveSpeed * Time.deltaTime);
+
+        //적 새가 일정 x좌표 이하로 넘어가면 점수+1
+        if (!getScore)
+        {
+            //if ((!getScore) && (transform.position.x < SCORE_POSITION))
+            if (transform.position.x < SCORE_POSITION)
+            {
+                if (!GameManager.Inst.MyPlayer.IsDead)
+                {
+                    Debug.Log("점수 +1");
+                    GameManager.Inst.Score += 1;
+                    getScore = true;
+                }
+            }
+        }
     }
 
 }

@@ -17,5 +17,8 @@ public class Test2 : MonoBehaviour
         int deleted = 3;
         deleted <<= 0;
         Debug.Log(deleted);
+
+        //GameManager_Test t1 = new GameManager_Test();
+        //GameManager t2 = new GameManager();
     }
 }

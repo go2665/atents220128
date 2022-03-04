@@ -1,4 +1,4 @@
-﻿using System.Collections;           //네임스페이스 설정(C# 컨테이너용)
+using System.Collections;           //네임스페이스 설정(C# 컨테이너용)
 using System.Collections.Generic;   //네임스페이스 설정(C# 컨테이너용, 제네릭)
 using UnityEngine;                  //네임스페이스 설정(Unity 용)
 using UnityEngine.InputSystem;      //Unity 새 인풋 시스템을 쓰기 위한 네임스페이스
@@ -22,15 +22,27 @@ using UnityEngine.InputSystem;      //Unity 새 인풋 시스템을 쓰기 위�
 public class Player : MonoBehaviour     
 {
     // jumpPower라는 이름의 float 타입의 변수를 만드는데. public이고 저장되는 초기값은 10.0이다.
-    public float jumpPower = 10.0f; 
+    public float jumpPower = 10.0f;
+    // 회전 속도
+    public float spinSpeed = 10.0f;
     // rigid라는 이름의 Rigidbody2D 타입의 변수를 만드는데, private이고 저장되는 초기값은 null이다.
     private Rigidbody2D rigid = null;
+    // 플레이어의 사망여부를 기록해놓은 변수
+    private bool isDead = false;
+    public bool IsDead
+    {
+        get
+        {
+            return isDead;
+        }
+    }
     
     // 게임 오브젝트가 만들어진(Instance) 후 실행되는 함수
     private void Awake() 
     {
         //cashing을 통해 무거운 작업을 최소한으로 하기 위해 Awake에서 찾음
-         rigid = GetComponent<Rigidbody2D>();   //Rigidbody2D 컴포넌트를 찾아서 rigid에 저장해라.
+        rigid = GetComponent<Rigidbody2D>();   //Rigidbody2D 컴포넌트를 찾아서 rigid에 저장해라.
+        GameManager.Inst.MyPlayer = this;
     }
 
     // 매 프레임 마다 호출되는 함수
@@ -54,12 +66,58 @@ public class Player : MonoBehaviour
         //context.started;      //키를 눌렀을 때
         //context.performed;    //키를 길게 눌렀었을 때(차징류)
         //context.canceled;     //키를 땠을 때
-        if (context.started)    //키를 눌렀을 때만 아래의 코드를 실행하라
-        {
-            //rigidbody에 힘을 가해라. 위쪽 방향으로 jumpPower만큼.
-            rigid.AddForce(Vector2.up * jumpPower);
 
-            Debug.Log("Jump!");
+        if (!isDead)
+        {
+            // 여기로 들어온것은 isDead == false인 상황
+            if (context.started)    //키를 눌렀을 때만 아래의 코드를 실행하라
+            {
+                //rigidbody에 힘을 가해라. 위쪽 방향으로 jumpPower만큼.
+                rigid.AddForce(Vector2.up * jumpPower);
+                //rigid.AddRelativeForce(Vector2.up * jumpPower);
+
+                //Debug.Log("Jump!");
+            }
+        } 
+    }
+
+    // 이 스크립트가 가진 컬라이더가 다른 컬라이더와 충돌한 직후에 실행되는 함수
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        // Debug.Log(collision.gameObject.name + "와 충돌");
+        OnDead();   // 죽었을 때 뭘 할지는 모르지만 죽었을때 하는 행동들이 기록된 함수를 실행
+
+        // 태그를 사용하여 바닥 충돌체크용 컬라이더가 있은 게임 오브젝트와 충돌했는지 확인                
+        if (collision.gameObject.CompareTag("Ground"))
+        {
+            OnFalldown(collision.gameObject);   //바닥에 떨어졌을 때 뭘할지는 모르지만, 바닥에 떨어졌을 때 해야하는 행동들이 기록된 함수를 실행
         }
+    }
+
+    //죽었을 때 실행될 함수. 죽을 때 해야할 행동들이 기록될 함수.
+    private void OnDead()
+    {
+        isDead = true;
+        rigid.constraints = RigidbodyConstraints2D.None;
+        rigid.gravityScale = 1.0f;  //죽었을 때는 빠르게 추락하기 위해 설정
+        rigid.AddTorque(5.0f);      //리지드바디를 통해 회전력 추가
+    }
+
+    //바닥에 떨어졌을 때 실행될 함수
+    private void OnFalldown(GameObject ground)
+    {
+        // Debug.Log("땅에 부딪쳤다.");
+        // GameObject.Find : 파라메터로 받은 문자열과 같은 이름을 가진 게임 오브젝트를 찾아주는 함수. 가장 비효율적
+
+        // FindObjectOfType : 특정 타입의 컴포넌트를 가지고 있는 첫번째 게임 오브젝트를 찾아주는 함수
+        // FindObjectsOfType : 특정 타입의 컴포넌트를 가지고 있는 모든 게임 오브젝트를 찾아주는 함수
+
+        // GameObject.FindGameObjectWithTag : 파라메터로 받은 문자열과 같은 태그를 가진 첫번째 게임 오브젝트를 찾아주는 함수
+        // GameObject.FindGameObjectsWithTag : 파라메터로 받은 문자열과 같은 태그를 가진 모든 게임 오브젝트를 찾아주는 함수
+
+        // 배경을 스크롤링하는 컴포넌트(스크립트)를 찾아옴
+        Scroller scroller = ground.GetComponent<Scroller>();
+        // 프로퍼티를 통해 스크롤 정지시킨다.
+        scroller.ScrollSwitch = false;
     }
 }
