@@ -84,7 +84,8 @@ public class Player : MonoBehaviour
     // 이 스크립트가 가진 컬라이더가 다른 컬라이더와 충돌한 직후에 실행되는 함수
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        // Debug.Log(collision.gameObject.name + "와 충돌");
+        // Debug.Log(collision.gameObject.name + "와 충돌");        
+
         OnDead();   // 죽었을 때 뭘 할지는 모르지만 죽었을때 하는 행동들이 기록된 함수를 실행
 
         // 태그를 사용하여 바닥 충돌체크용 컬라이더가 있은 게임 오브젝트와 충돌했는지 확인                
@@ -92,6 +93,20 @@ public class Player : MonoBehaviour
         {
             OnFalldown(collision.gameObject);   //바닥에 떨어졌을 때 뭘할지는 모르지만, 바닥에 떨어졌을 때 해야하는 행동들이 기록된 함수를 실행
         }
+        else
+        {
+            OnBirdStrike(collision);
+        }
+    }
+
+    //새와 충돌했을 때 일어나는 일을 기록해놓은 함수
+    private void OnBirdStrike(Collision2D collision)
+    {
+        //collision.contactCount;
+        //collision.contacts[0].point;  //정확하게 부딪친 위치를 확인하는 방법
+
+        rigid.AddForce(new Vector2(-1, 1) * 2, ForceMode2D.Impulse);    //좌상단쪽으로 튕기기
+        rigid.AddTorque(5.0f);      //리지드바디를 통해 회전력 추가
     }
 
     //죽었을 때 실행될 함수. 죽을 때 해야할 행동들이 기록될 함수.
@@ -99,8 +114,7 @@ public class Player : MonoBehaviour
     {
         isDead = true;
         rigid.constraints = RigidbodyConstraints2D.None;
-        rigid.gravityScale = 1.0f;  //죽었을 때는 빠르게 추락하기 위해 설정
-        rigid.AddTorque(5.0f);      //리지드바디를 통해 회전력 추가
+        rigid.gravityScale = 1.0f;  //죽었을 때는 빠르게 추락하기 위해 설정        
     }
 
     //바닥에 떨어졌을 때 실행될 함수

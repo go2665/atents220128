@@ -107,7 +107,7 @@ public class EnemySpawner : MonoBehaviour
 
             flags = random & mask;  //최종적으로 random값에 mask값을 & 시켜서 두칸 비우기
         }
-        flags |= 0b_0001;  //테스트 용
+        //flags |= 0b_0010_0001;  //테스트 용
         return flags;
     }
 

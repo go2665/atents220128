@@ -20,5 +20,6 @@ public class Test2 : MonoBehaviour
 
         //GameManager_Test t1 = new GameManager_Test();
         //GameManager t2 = new GameManager();
+
     }
 }

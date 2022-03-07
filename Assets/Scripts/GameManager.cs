@@ -1,4 +1,6 @@
 using System;
+using UnityEngine;
+using UnityEngine.UI;
 
 //싱글톤으로 만들 GameManager
 //싱글톤 : 클래스의 객체가 단 하나만 존재하게 프로그래밍하는 디자인 패턴
@@ -12,9 +14,16 @@ using System;
 //dynamic : 동적. 프로그램 실행중(Run time)에 변경되는 것들.
 
 public class GameManager
-{
+{ 
     private static GameManager instance = null; //프로그램 전체에서 단 하나만 존재한다.
     private GameManager() { }   //생성자를 private으로 해서 밖에서 new를 할 수 없도록 한다.
+
+    private Text scoreText = null;      // score가 찍힐 UI text용 참조
+    private void RefreshScoreText()
+    {
+        //scoreText의 텍스트 갱신
+        scoreText.text = $"Score : {score}";
+    }
 
     private int score = 0;
     public int Score
@@ -26,6 +35,7 @@ public class GameManager
         set
         {
             score = value;
+            RefreshScoreText(); //값의 변화가 있으면 자동으로 화면 갱신
         }
     }
 
@@ -53,10 +63,11 @@ public class GameManager
             if( instance == null )  // 객체 생성이 한번도 안일어났는지 확인
             {
                 instance = new GameManager();   // 한번도 안일어났으면 그때 처음으로 객체 생성
+                instance.scoreText = GameObject.Find("ScoreText").GetComponent<Text>(); //ScoreText 찾아서 변수 채우기 넣을 것
             }
             return instance;    //return까지 왔다는 것은 instance에 이미 무엇인가 할당이 되어있음
         }
-    }    
+    }
 }
 
 //public class TestA
