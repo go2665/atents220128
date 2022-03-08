@@ -78,7 +78,7 @@ public class Player : MonoBehaviour
 
                 //Debug.Log("Jump!");
             }
-        } 
+        }
     }
 
     // 이 스크립트가 가진 컬라이더가 다른 컬라이더와 충돌한 직후에 실행되는 함수

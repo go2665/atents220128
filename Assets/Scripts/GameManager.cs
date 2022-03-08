@@ -18,11 +18,16 @@ public class GameManager
     private static GameManager instance = null; //프로그램 전체에서 단 하나만 존재한다.
     private GameManager() { }   //생성자를 private으로 해서 밖에서 new를 할 수 없도록 한다.
 
-    private Text scoreText = null;      // score가 찍힐 UI text용 참조
-    private void RefreshScoreText()
+    //private Text scoreText = null;      // score가 찍힐 UI text용 참조
+    private ImageNumber imageNumber = null;     //score를 이미지로 보여주는 스크립트 참조
+    
+    // 화면에 표시되는 점수를 현재 score값으로 변경하는 함수
+    private void RefreshScore()
     {
         //scoreText의 텍스트 갱신
-        scoreText.text = $"Score : {score}";
+        //scoreText.text = $"Score : {score}";
+
+        imageNumber.Number = score;
     }
 
     private int score = 0;
@@ -35,7 +40,7 @@ public class GameManager
         set
         {
             score = value;
-            RefreshScoreText(); //값의 변화가 있으면 자동으로 화면 갱신
+            RefreshScore(); //값의 변화가 있으면 자동으로 화면 갱신
         }
     }
 
@@ -63,7 +68,8 @@ public class GameManager
             if( instance == null )  // 객체 생성이 한번도 안일어났는지 확인
             {
                 instance = new GameManager();   // 한번도 안일어났으면 그때 처음으로 객체 생성
-                instance.scoreText = GameObject.Find("ScoreText").GetComponent<Text>(); //ScoreText 찾아서 변수 채우기 넣을 것
+                //instance.scoreText = GameObject.Find("ScoreText").GetComponent<Text>(); //ScoreText 찾아서 변수 채우기 넣을 것
+                instance.imageNumber = GameObject.Find("ImageNumber").GetComponent<ImageNumber>();
             }
             return instance;    //return까지 왔다는 것은 instance에 이미 무엇인가 할당이 되어있음
         }
