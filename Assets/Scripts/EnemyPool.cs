@@ -50,7 +50,11 @@ public class EnemyPool : MonoBehaviour
         // 풀에 있는 오브젝트가 다 떨어졌을 때 확장하는 함수
     }
 
-    // 하나씩 받는 것
+    // Pool에서 오브젝트를 하나 가져오는 함수
+    public GameObject GetEnemy()
+    {
+        return null;
+    }
 
 
     //3월8일 과제
@@ -61,6 +65,7 @@ public class EnemyPool : MonoBehaviour
     // 메모리 풀 초기화 함수를 완성한다.
     //
     // 3번. 난이도 중상~상하
+    // Pool에서 오브젝트를 하나 가져오는 함수
     // Pool이 가지고 있는 오브젝트보다 더 많은 오브젝트가 요구되었을 때 처리하는 함수
 
 }
