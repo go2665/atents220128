@@ -40,5 +40,14 @@ public class TestPlayer : MonoBehaviour
         }
     }
 
+    public void TestPoolUse(InputAction.CallbackContext context)
+    {
+        if( context.started )
+        {            
+            GameObject obj = EnemyPool.Inst.GetEnemy(0);
+            Debug.Log(obj);
+        }
+    }
+
 
 }

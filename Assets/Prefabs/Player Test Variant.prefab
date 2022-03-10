@@ -53,7 +53,37 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4638699272657650430, guid: f8e78bc7baed8844ba1c46d40b88138c, type: 3}
       propertyPath: m_Name
-      value: Player
+      value: Player Test Variant
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 4638699272657650948, guid: f8e78bc7baed8844ba1c46d40b88138c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.size
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4638699272657650948, guid: f8e78bc7baed8844ba1c46d40b88138c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4638699272657650948, guid: f8e78bc7baed8844ba1c46d40b88138c, type: 3}
+      propertyPath: m_ActionEvents.Array.data[3].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: 
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 4638699272657650427, guid: f8e78bc7baed8844ba1c46d40b88138c, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: f8e78bc7baed8844ba1c46d40b88138c, type: 3}
+--- !u!1 &2654000311788117689 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4638699272657650430, guid: f8e78bc7baed8844ba1c46d40b88138c, type: 3}
+  m_PrefabInstance: {fileID: 7244918860581133383}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &9209608078866592974
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2654000311788117689}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6cb3ec463eafcfc459a59d8033f80d71, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
