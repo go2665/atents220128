@@ -1,3 +1,4 @@
+using System;
 using System.Collections;           //네임스페이스 설정(C# 컨테이너용)
 using System.Collections.Generic;   //네임스페이스 설정(C# 컨테이너용, 제네릭)
 using UnityEngine;                  //네임스페이스 설정(Unity 용)
@@ -93,10 +94,25 @@ public class Player : MonoBehaviour
         {
             OnFalldown(collision.gameObject);   //바닥에 떨어졌을 때 뭘할지는 모르지만, 바닥에 떨어졌을 때 해야하는 행동들이 기록된 함수를 실행
         }
+        else if (collision.gameObject.CompareTag("Sky"))    //하늘에 부딪쳤을 때
+        {
+            OnEnterSky();
+        }
         else
         {
             OnBirdStrike(collision);
         }
+    }
+
+    //하늘과 충돌했을 때 일어나는 일을 기록해 놓은 함수
+    private void OnEnterSky()
+    {
+        Scroller scroller = GameObject.FindObjectOfType<Scroller>();    //타입으로 스크롤러 찾고
+        scroller.ScrollSwitch = false;  //스크롤러 움직임 멈추고
+
+        rigid.angularVelocity = 0.0f;   //이전 회전력 제거하고
+        rigid.AddForce(Vector2.right, ForceMode2D.Impulse); // 오른쪽으로 약간 민다음
+        rigid.AddTorque(-5.0f); //시계방향으로 회전
     }
 
     //새와 충돌했을 때 일어나는 일을 기록해놓은 함수
@@ -105,6 +121,7 @@ public class Player : MonoBehaviour
         //collision.contactCount;
         //collision.contacts[0].point;  //정확하게 부딪친 위치를 확인하는 방법
 
+        rigid.angularVelocity = 0.0f;   //이전 회전력 제거(회전력이 누적되는 것을 방지)
         rigid.AddForce(new Vector2(-1, 1) * 2, ForceMode2D.Impulse);    //좌상단쪽으로 튕기기
         rigid.AddTorque(5.0f);      //리지드바디를 통해 회전력 추가
     }
