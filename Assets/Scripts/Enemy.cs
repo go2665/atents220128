@@ -3,6 +3,14 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+public enum EnemyType : byte
+{
+    NORMAL = 0,
+    BLUE,
+    RED,
+    INVALID
+}
+
 public class Enemy : MonoBehaviour
 {
     //이 게임 오브젝트는 게임이 시작되면 -x축 방향으로 일정한 속도로 이동한다.
@@ -13,10 +21,26 @@ public class Enemy : MonoBehaviour
     //transform에 position에 위치값이 저장되어 있음
     //transform에 어떤 함수가 있음
 
+    public float moveSpeed = 1.5f;
+
     private const float SCORE_POSITION = 1.5f;
     private bool getScore = false;
+    private EnemyType type = EnemyType.INVALID;
+    public EnemyType Type
+    {
+        get
+        {
+            return type;
+        }
+        set
+        {
+            if (type == EnemyType.INVALID)
+            {
+                type = value;   // 한번만 쓸 수 있다.
+            }
+        }
+    }
 
-    public float moveSpeed = 1.5f;
 
     //private void Start()
     //{
@@ -27,7 +51,13 @@ public class Enemy : MonoBehaviour
     //    // (0,1,1)+(1,3,1) = (1,4,2)
     //    // (1,2,3) * 2 = (2,4,6)
     //}
-    
+
+    // 오브젝트가 활성화 될때 실행되는 함수
+    private void OnEnable()
+    {
+        getScore = false;
+    }
+
     // 매프레임 호출
     private void Update()
     {

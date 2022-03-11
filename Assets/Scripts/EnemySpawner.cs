@@ -151,11 +151,15 @@ public class EnemySpawner : MonoBehaviour
     {
         // 어떤 종류의 적을 생성할지 결정
         int enemyIndex = Random.Range(0, enemyPrefabs.Length);
-        GameObject enemy = GameObject.Instantiate(enemyPrefabs[enemyIndex], this.transform);
+        //GameObject enemy = GameObject.Instantiate(enemyPrefabs[enemyIndex], this.transform);
+        GameObject enemy = EnemyPool.Inst.GetEnemy();
+        enemy.transform.parent = this.transform;
+        enemy.transform.position = this.transform.position;
+
         //int spaceIndex = Random.Range(0, MAX_SPACE_COUNT);
         //enemy.transform.Translate(Vector2.down * Random.Range(0.0f,2.0f));
         enemy.transform.Translate(Vector2.down * index * SPACE_HEIGHT);
-        Destroy(enemy, LIFETIME);
+        //Destroy(enemy, LIFETIME);
     }
 
     //2월 28일 과제

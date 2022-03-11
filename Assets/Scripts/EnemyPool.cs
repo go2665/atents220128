@@ -4,11 +4,17 @@ using UnityEngine;
 
 public class EnemyPool : MonoBehaviour
 {
-    //private const int DEFAULT_POOL_SIZE = 16;
-    private const int DEFAULT_POOL_SIZE = 2;
+    private const int DEFAULT_POOL_SIZE = 16;
+    //private const int DEFAULT_POOL_SIZE = 2;
     private const int RANDOM_INDEX = -1;
 
     private int[] queueSize = null;  //해당 큐의 현재 크기 + 새로 생성되는 적 이름에 붙일 인덱스 번호로도 싸용
+    
+    // 대량으로 생성해 놓은 메모리 풀
+    private Queue<GameObject>[] pools = null;   //적 종류별로 만든 Queue를 저장할 배열
+
+    // 생성할 적의 종류
+    public GameObject[] enemyPrefabs = null;
 
     private static EnemyPool instance = null;
     public static EnemyPool Inst
@@ -38,11 +44,6 @@ public class EnemyPool : MonoBehaviour
         }
     }
 
-    // 생성할 적의 종류
-    public GameObject[] enemyPrefabs = null;
-
-    // 대량으로 생성해 놓은 메모리 풀
-    private Queue<GameObject>[] pools = null;   //적 종류별로 만든 Queue를 저장할 배열
 
     // 초기화(pool변수를 채운다.)
     // 예시) (한 페이지 최대 16마리로 가정) * (3종류) = 48개. => Instantiate를 48번 한다.
@@ -58,6 +59,27 @@ public class EnemyPool : MonoBehaviour
     }
 
     // Pool을 처음 생성하거나 크기를 확장하고 싶을때(pool에 오브젝트가 바닥났을 때) 호출하는 함수
+    private void PoolExpand(EnemyType type, int poolSize, bool init = false)
+    {
+        int index = -1;
+        //switch (type)
+        //{
+        //    case EnemyType.NORMAL:
+        //        index = 0;
+        //        break;
+        //    case EnemyType.BLUE:
+        //        index = 1;
+        //        break;
+        //    case EnemyType.RED:
+        //        index = 2;
+        //        break;
+        //    case EnemyType.INVALID:
+        //        break;
+        //}
+        index = (int)type;
+        PoolExpand(index, poolSize, init);
+    }
+
     private void PoolExpand(int poolIndex, int poolSize, bool init = false)
     {
         //poolIndex가 적절한 범위인지 확인
@@ -76,6 +98,22 @@ public class EnemyPool : MonoBehaviour
                 GameObject obj = GameObject.Instantiate(enemyPrefabs[poolIndex], this.transform);   //오브젝트 만들고 EnemyPool의 자식으로 붙임
                 obj.name = $"{enemyPrefabs[poolIndex].name}_{queueSize[poolIndex]}";    //이름 변경
                 obj.SetActive(false);           //오브젝트 비활성화
+                Enemy enemy = obj.GetComponent<Enemy>();
+                switch(poolIndex)
+                {
+                    case 0:
+                        enemy.Type = EnemyType.NORMAL;
+                        break;
+                    case 1:
+                        enemy.Type = EnemyType.BLUE;
+                        break;
+                    case 2:
+                        enemy.Type = EnemyType.RED;
+                        break;
+                    default:
+                        break;
+                }               
+
                 pools[poolIndex].Enqueue(obj);  //큐에 오브젝트 삽입
                 queueSize[poolIndex]++;         //queueSize 증가
             }
@@ -115,19 +153,33 @@ public class EnemyPool : MonoBehaviour
         return result;
     }
 
+    // 파라메터로 받은 enemy를 pool로 돌려주는 함수
+    public void ReturnEnemy(GameObject enemy)
+    {
+        Enemy enemyScript = enemy.GetComponent<Enemy>();
+        enemy.SetActive(false);
+        Queue<GameObject> targetPool = pools[(int)enemyScript.Type];
+        targetPool.Enqueue(enemy);
+    }
 
-    //3월8일 과제
-    // 1번. 난이도 최하
-    // 새가 천장에 부딪쳐도 죽는다.
-    //
-    // 2번. 난이도 중~중상
-    // 메모리 풀 초기화 함수를 완성한다.
-    //
-    // 3번. 난이도 중상~상하
-    // Pool에서 오브젝트를 하나 가져오는 함수
+        //3월8일 과제
+        // 1번. 난이도 최하
+        // 새가 천장에 부딪쳐도 죽는다.
+        //
+        // 2번. 난이도 중~중상
+        // 메모리 풀 초기화 함수를 완성한다.
+        //
+        // 3번. 난이도 중상~상하
+        // Pool에서 오브젝트를 하나 가져오는 함수
 
 
-    //3월10일 과제
-    // Pool이 가지고 있는 오브젝트보다 더 많은 오브젝트가 요구되었을 때 처리하는 함수
+        //3월10일 과제
+        // Pool이 가지고 있는 오브젝트보다 더 많은 오브젝트가 요구되었을 때 처리하는 함수
 
+
+        //3월11일
+        //스포너에서 Pool을 이용해 오브젝트 받기
+        //사용이 끝난 오브젝트를 Pool로 반환
+
+    
 }
