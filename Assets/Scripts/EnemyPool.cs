@@ -7,6 +7,9 @@ public class EnemyPool : MonoBehaviour
     //private const int DEFAULT_POOL_SIZE = 16;
     private const int DEFAULT_POOL_SIZE = 2;
     private const int RANDOM_INDEX = -1;
+
+    private int[] queueSize = null;  //해당 큐의 현재 크기 + 새로 생성되는 적 이름에 붙일 인덱스 번호로도 싸용
+
     private static EnemyPool instance = null;
     public static EnemyPool Inst
     {
@@ -46,24 +49,37 @@ public class EnemyPool : MonoBehaviour
     public void Initialize()
     {
         pools = new Queue<GameObject>[enemyPrefabs.Length]; // 적 종류의 수만큼 배열 크기 확정
+        queueSize = new int[enemyPrefabs.Length];  //각 풀의 크기값 초기화
 
-        for( int i = 0; i<enemyPrefabs.Length; i++)
+        for ( int i = 0; i<enemyPrefabs.Length; i++)
         {
-            pools[i] = new Queue<GameObject>();             // 큐를 하나 생성
-            for( int j = 0; j< DEFAULT_POOL_SIZE; j++)      // DEFAULT_POOL_SIZE 만큼 오브젝트 생성
-            {
-                GameObject obj = GameObject.Instantiate(enemyPrefabs[i], this.transform);   //생성하고 EnemyPool의 자식으로 추가
-                obj.name = $"{enemyPrefabs[i].name}_{j}";   // 이름 변경
-                obj.SetActive(false);   // 비활성화 상태로 변경
-                pools[i].Enqueue(obj);  // 큐에 생성한 오브젝트 삽입
-            }
+            PoolExpand(i, DEFAULT_POOL_SIZE, true); //적 종류별로 풀 생성하고 채우기
         }
     }
 
-    // Pool이 가지고 있는 오브젝트보다 더 많은 오브젝트가 요구되었을 때 처리하는 함수
-    private void PoolExpand()
+    // Pool을 처음 생성하거나 크기를 확장하고 싶을때(pool에 오브젝트가 바닥났을 때) 호출하는 함수
+    private void PoolExpand(int poolIndex, int poolSize, bool init = false)
     {
-        // 풀에 있는 오브젝트가 다 떨어졌을 때 확장하는 함수
+        //poolIndex가 적절한 범위인지 확인
+        if ( -1 < poolIndex && poolIndex < enemyPrefabs.Length)
+        {            
+            pools[poolIndex] = new Queue<GameObject>(poolSize); // 비어있는 풀 생성. 초기 크기 지정
+
+            int makeSize = poolSize;    // 실제 Instanticate할 갯수 설정
+            if( !init )                 // Initialize 함수에서 호출했을 경우가 아니면
+            {                           // Queue 크기의 절반만큼만 생성(이미 만들어져 있던 오브젝트만큼은 생성할 필요가 없으니까)
+                makeSize >>= 1;         //makeCount = makeCount / 2;  makeCount = makeCount >> 1;
+            }
+
+            for(int i = 0; i< makeSize; i++)    // 오브젝트 하나씩 생성
+            {
+                GameObject obj = GameObject.Instantiate(enemyPrefabs[poolIndex], this.transform);   //오브젝트 만들고 EnemyPool의 자식으로 붙임
+                obj.name = $"{enemyPrefabs[poolIndex].name}_{queueSize[poolIndex]}";    //이름 변경
+                obj.SetActive(false);           //오브젝트 비활성화
+                pools[poolIndex].Enqueue(obj);  //큐에 오브젝트 삽입
+                queueSize[poolIndex]++;         //queueSize 증가
+            }
+        }        
     }
 
     // Pool에서 오브젝트를 하나 가져오는 함수(index는 생성할 종류, 기본적으로는 랜덤으로 결정)
@@ -92,8 +108,8 @@ public class EnemyPool : MonoBehaviour
         {
             // 큐에 오브젝트가 없다.
             // 없으니 확장 작업 실행
-            PoolExpand();   // 큐가 두배로 커지고 오브젝트도 추가되는 함수
-            //result = GetEnemy(target);
+            PoolExpand(target, queueSize[target] << 1);   // 큐가 두배로 커지고 오브젝트도 추가되는 함수
+            result = GetEnemy(target);
         }
 
         return result;
