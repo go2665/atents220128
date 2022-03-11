@@ -49,5 +49,28 @@ public class TestPlayer : MonoBehaviour
         }
     }
 
+    public void TestInput_A(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            GameManager.Inst.SaveGameData();
+        }
+    }
+
+    public void TestInput_S(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+            GameManager.Inst.LoadGameData();
+        }
+    }
+
+    public void TestInput_D(InputAction.CallbackContext context)
+    {
+        if (context.started)
+        {
+        }
+    }
+
 
 }

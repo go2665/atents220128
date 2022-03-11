@@ -1,4 +1,5 @@
 using System;
+using System.IO;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -73,6 +74,30 @@ public class GameManager
             }
             return instance;    //return까지 왔다는 것은 instance에 이미 무엇인가 할당이 되어있음
         }
+    }
+
+    public void SaveGameData()
+    {
+        SaveData saveData = new SaveData();
+        saveData.highScore = 123;
+        saveData.test1 = 11.22f;
+        saveData.test2 = "Test String";
+        string json = JsonUtility.ToJson(saveData); //SaveData 클래스에 있는 값들을 json형식으로 바꿔라
+        Debug.Log(json);
+        //{ "highScore":123,"test1":11.220000267028809,"test2":"Test String"}
+        string path = $"{Application.dataPath}/Save/Save.json";
+        File.WriteAllText(path, json);  //path에 json텍스트를 실제 파일로 저장 
+    }
+
+    public void LoadGameData()
+    {
+        string path = $"{Application.dataPath}/Save/Save.json";
+        string json = File.ReadAllText(path);   //path 파일에 있는 텍스트를 읽어서 json변수에 스트링으로 저장
+        SaveData saveData = JsonUtility.FromJson<SaveData>(json); //json형식의 텍스트를 SaveData 클래스에 담기
+        Score = saveData.highScore;
+        Debug.Log($"highScore : {saveData.highScore}");
+        Debug.Log($"Test1 : {saveData.test1}");
+        Debug.Log($"Test2 : {saveData.test2}");
     }
 }
 
