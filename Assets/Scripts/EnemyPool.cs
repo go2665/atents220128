@@ -61,7 +61,7 @@ public class EnemyPool : MonoBehaviour
     // Pool을 처음 생성하거나 크기를 확장하고 싶을때(pool에 오브젝트가 바닥났을 때) 호출하는 함수
     private void PoolExpand(EnemyType type, int poolSize, bool init = false)
     {
-        int index = -1;
+        //int index = -1;
         //switch (type)
         //{
         //    case EnemyType.NORMAL:
@@ -76,7 +76,7 @@ public class EnemyPool : MonoBehaviour
         //    case EnemyType.INVALID:
         //        break;
         //}
-        index = (int)type;
+        int index = (int)type;
         PoolExpand(index, poolSize, init);
     }
 

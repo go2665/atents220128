@@ -31,6 +31,15 @@ public class GameManager
         imageNumber.Number = score;
     }
 
+    private int highScore = 0;
+    public int HighScore
+    {
+        get
+        {
+            return highScore;
+        }
+    }
+
     private int score = 0;
     public int Score
     {
@@ -71,6 +80,7 @@ public class GameManager
                 instance = new GameManager();   // 한번도 안일어났으면 그때 처음으로 객체 생성
                 //instance.scoreText = GameObject.Find("ScoreText").GetComponent<Text>(); //ScoreText 찾아서 변수 채우기 넣을 것
                 instance.imageNumber = GameObject.Find("ImageNumber").GetComponent<ImageNumber>();
+                instance.LoadGameData();
             }
             return instance;    //return까지 왔다는 것은 instance에 이미 무엇인가 할당이 되어있음
         }
@@ -94,10 +104,16 @@ public class GameManager
         string path = $"{Application.dataPath}/Save/Save.json";
         string json = File.ReadAllText(path);   //path 파일에 있는 텍스트를 읽어서 json변수에 스트링으로 저장
         SaveData saveData = JsonUtility.FromJson<SaveData>(json); //json형식의 텍스트를 SaveData 클래스에 담기
-        Score = saveData.highScore;
+        highScore = saveData.highScore;
         Debug.Log($"highScore : {saveData.highScore}");
         Debug.Log($"Test1 : {saveData.test1}");
         Debug.Log($"Test2 : {saveData.test2}");
+    }
+
+    public void OnGameOver()
+    {
+        GameOverUI gameOverUI = GameObject.FindObjectOfType<GameOverUI>();
+        gameOverUI.OnGameOver();
     }
 }
 

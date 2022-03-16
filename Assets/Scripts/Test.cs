@@ -1,4 +1,4 @@
-﻿using System.Collections;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -70,6 +70,7 @@ public class Test : MonoBehaviour
 
         //this.transform.position += (Vector3)moveDir * moveSpeed * Time.deltaTime;
 
+        
     }
 
     // int i = 0;
