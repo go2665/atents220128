@@ -4,7 +4,7 @@ using System;
 public class SaveData
 {
     public int highScore;
-    public float test1;
-    public string test2;
+    //public float test1;
+    //public string test2;
 }
 

@@ -129,11 +129,14 @@ public class Player : MonoBehaviour
     //죽었을 때 실행될 함수. 죽을 때 해야할 행동들이 기록될 함수.
     private void OnDead()
     {
-        isDead = true;
-        rigid.constraints = RigidbodyConstraints2D.None;
-        rigid.gravityScale = 1.0f;  //죽었을 때는 빠르게 추락하기 위해 설정        
-        
-        GameManager.Inst.OnGameOver();
+        if (!isDead)
+        {
+            isDead = true;
+            rigid.constraints = RigidbodyConstraints2D.None;
+            rigid.gravityScale = 1.0f;  //죽었을 때는 빠르게 추락하기 위해 설정        
+
+            GameManager.Inst.OnGameOver();
+        }
     }
 
     //바닥에 떨어졌을 때 실행될 함수
